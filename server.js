@@ -20,7 +20,8 @@ https.createServer(options, (req, res) => {
         });
         req.on('end', () => {
             inputs.push(body);
-            res.end('Data received');
+            res.writeHead(302, { 'Location': '/display' });
+            res.end();
         });
     } else if (req.method === 'GET' && req.url === '/display') {
         fs.readFile('display.html', 'utf8', (err, data) => {
@@ -33,6 +34,10 @@ https.createServer(options, (req, res) => {
                 res.end(html);
             }
         });
+    } else if (req.method === 'GET' && req.url === '/input') {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        const readStream = fs.createReadStream('input.html');
+        readStream.pipe(res);
     }
 }).listen(8000, () => {
     console.log('Server running at https://localhost:8000/');
