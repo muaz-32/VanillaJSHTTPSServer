@@ -20,8 +20,18 @@ https.createServer(options, (req, res) => {
         });
         req.on('end', () => {
             inputs.push(body);
-            res.writeHead(200, { 'Content-Type': 'text/plain' });
-            res.end('Data received: ' + inputs);
+            res.end('Data received');
+        });
+    } else if (req.method === 'GET' && req.url === '/display') {
+        fs.readFile('display.html', 'utf8', (err, data) => {
+            if (err) {
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Server error');
+            } else {
+                const html = data.replace('{{data}}', JSON.stringify(inputs));
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end(html);
+            }
         });
     }
 }).listen(8000, () => {

@@ -3,3 +3,9 @@ POST https://localhost:8000/submit
 Content-Type: text/plain
 
 Hello
+
+### GET request to the display URL
+GET https://localhost:8000/display
+
+### GET request to the main URL
+GET https://localhost:8000/
